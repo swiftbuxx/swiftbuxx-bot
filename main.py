@@ -1,16 +1,18 @@
+import discord
+from discord.ext import commands
 import os
-import telebot
 
-TOKEN = os.getenv("TOKEN")
-bot = telebot.TeleBot(TOKEN)
+intents = discord.Intents.default()
+intents.message_content = True
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    bot.reply_to(message, "Fala! Eu sou o SwiftBuxx Bot e já tô online! 💛")
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-@bot.message_handler(func=lambda m: True)
-def responder(message):
-    bot.reply_to(message, f"Você disse: {message.text}")
+@bot.event
+async def on_ready():
+    print(f"SwiftBuxx online!")
 
-print("Bot ligado!")
-bot.infinity_polling()
+@bot.command()
+async def ping(ctx):
+    await ctx.send("SwiftBuxx online! 🏃💨")
+
+bot.run(os.getenv("TOKEN"))
